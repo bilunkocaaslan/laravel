@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>REHBER</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.6/sweetalert2.js'></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.6/sweetalert2.min.css'>
+    <!--<script src="mindmup-editabletable.js"> </script>-->
+
+</head>
+
+<body>
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Kişi Ekle</h4>
+                    <button type="button" class="Ekle" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div style="text-align:center">
+                        <form>
+                            Ad:<br />
+                            <input type="text" name="ad" id="ad" /><br />
+                            Soyad:<br />
+                            <input type="text" name="soyad" id="soyad" /><br />
+                            E-mail:<br />
+                            <input type="email" name="e-mail" id=mail /><br />
+                            Tel No:<br />
+                            <input type="number" name="telNo" id=telNo /><br />
+                        </form>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" onclick="Ekle()"
+                            data-dismiss="modal">Ekle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal" id="myModal1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Düzenle</h4>
+                    <button type="button" class="Düzenle" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form>
+                        Düzenleme işlemi için güncellemek istediğiniz satırın üstüne tıklayınız.
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger " onclick="Düzenle()"
+                        data-dismiss="modal">Tamam</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal" id="myModal2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Sil</h4>
+                    <button type="button" class="Sil" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form>
+                        Silme işlemi başarılı.
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="Sil()" data-dismiss="modal">Tamam</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- CLASS/CONTAINER -->
+    <div class="container">
+
+        <div style="text-align:center">
+            <h1>REHBER</h1>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover" id="table">
+        </div>
+        <style>
+         body {
+         background-image: url("wp.jpg");
+         }
+         tbody{
+             font-weight: 500;
+         }
+        </style>
+
+        <thead>
+
+            <tr>
+                <th>Ad</th>
+                <th>Soyad</th>
+                <th>E-mail</th>
+                <th>Tel No</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr id="1">
+
+                <td>Bilun</td>
+                <td>Kocaaslan</td>
+                <td>bilunkocaaslan@hotmail.com</td>
+                <td>123456789987</td>
+
+
+                <td>
+                    <button type="button" value="Düzenle" id="edit" onclick="Düzenle()" class="btn btn-info" 
+                        data-toggle="modal" data-target="#myModal1">Düzenle</button>
+
+                </td>
+
+                <td>
+                    <button type="button" value="Sil" id="delete" onclick="Sil()" class="btn btn-info"
+                        data-toggle="modal" data-target="#myModal2">Sil</button></br>
+                </td>
+
+            </tr>
+            
+            </tr>
+        </tbody>
+        </table>
+    </div>
+    </div>
+    <script>
+     
+
+        function Ekle(table) {
+         
+            let ad = $("#ad").val();
+            let soyad = $("#soyad").val();
+            let mail = $("#mail").val();
+            let telNo = $("#telNo").val();
+           
+            $.ajax({
+            type: 'POST',
+            url: 'https://odev.zertel.net/api/create/',
+            data: { ad: $("#ad").val(), soyad: $("#soyad").val(), eposta: $("#mail").val(), telefon: $("#telNo").val() },
+            
+            success: function (e) {
+              swal("Kişi Başarıyla Eklendi!", "", "success");
+              var trLen = $("#table").children('tr').length;
+              
+                $("#table").append("<tr id=" + (parseInt(trLen) + 1) + ">" +
+                                   "<td id=tr" + (parseInt(trLen) + 1) + "-ad>" +  $("#ad").val() + "</td>" +
+                                   "<td id=tr" + (parseInt(trLen) + 1) + "-soyad>" +  $("#soyad").val() + "</td>" +
+                                   "<td id=tr" + (parseInt(trLen) + 1) + "-eposta>" +  $("#mail").val() + "</td>" +
+                                   "<td id=tr" + (parseInt(trLen) + 1) + "-telefon>" +  $("#telNo").val() + "</td>" +
+                                   "<td>" + "<button type='button' value = 'Düzenle' id = 'edit' onclick='Düzenle()'  class='btn btn-info'
+                                    ' data-toggle='modal' data-target='#myModal1' >Düzenle</button>" + "</td>" '+
+                                   "<td>" + "<button type='button' value = 'Sil' id = 'delete' onclick='Sil()'class='btn btn-info' data-toggle='modal'
+                                    ' data-target='#myModal2''>Sil</button>" + "</td>" '+' 
+                                   "</tr>");
+                               $("#ad").val("");
+                               $("#soyad").val("");
+                               $("#mail").val("");
+                               $("#telNo").val("");
+                   
+            },
+        });
+                    };
+            
+        $.ajax({
+            type: 'GET',
+            url: 'https://odev.zertel.net/api/list/',
+            
+            success: function (e) {
+                var trLen = $("#table").children('tr').length;
+                $.each(e,function(i , deneme){
+
+                $("#table").append("<tr id=" + (parseInt(trLen) + 1) + ">" +
+                                    "<td id=tr" + (parseInt(trLen) + 1) + "-ad>" + deneme.ad + "</td>" +
+                                    "<td id=tr" + (parseInt(trLen) + 1) + "-soyad>" + deneme.soyad + "</td>" +
+                                    "<td id=tr" + (parseInt(trLen) + 1) + "-eposta>" + deneme.eposta + "</td>" +
+                                    "<td id=tr" + (parseInt(trLen) + 1) + "-telefon>" + deneme.telefon + "</td>" +
+                                    "<td>" + "<button type='button' value = 'Düzenle' id = 'edit' onclick='Düzenle()'  class='btn btn-info' 
+                                        'data-toggle='modal' data-target='#myModal1' >Düzenle</button>" + "</td>" '+
+                                    "<td>" + "<button type='button' value = 'Sil' id = 'delete' onclick='Sil()'class='btn btn-info' 
+                                        'data-toggle='modal' data-target='#myModal2''>Sil</button>" + "</td>" '+' 
+                                    "</tr>");
+                    });
+
+            },
+        });
+
+
+
+        function Ekle(table) {
+            id++;
+            let ad = $("#ad").val();
+            let soyad = $("#soyad").val();
+            let mail = $("#mail").val();
+            let telNo = $("#telNo").val();
+            $("#table").append("<tr id=" + (parseInt(trLen) + 1) + ">" +
+                                   "<td id=tr" + (parseInt(trLen) + 1) + "-ad>" +  $("#ad").val() + "</td>" +
+                                   "<td id=tr" + (parseInt(trLen) + 1) + "-soyad>" +  $("#soyad").val() + "</td>" +
+                                   "<td id=tr" + (parseInt(trLen) + 1) + "-eposta>" +  $("#mail").val() + "</td>" +
+                                   "<td id=tr" + (parseInt(trLen) + 1) + "-telefon>" +  $("#telNo").val() + "</td>" +
+                                   "<td>" +
+                                    "<button type='button' value = 'Düzenle' id = 'edit' onclick='Düzenle()' class='btn btn-info' data-toggle='modal' 
+                                     'data-target='#myModal1' >Düzenle</button>" + "</td>" '+
+                                   "<td>" + "<button type='button' value = 'Sil' id = 'delete' onclick='Sil()'class='btn btn-info' data-toggle='modal' 
+                                    'data-target='#myModal2''>Sil</button>" + "</td>" '+' 
+                                    "</tr>");
+
+
+
+    </script>
+    <!--  $('#table').editableTableWidget();  -->
+    <script>
+        function Düzenle(table) {
+               
+            document.getElementById("table").contentEditable = true;   
+            
+            
+        };
+    </script>
+    <script>
+        function Sil() {
+            $("table").on("click", "#delete", function () {
+                $(this).parents("tr").remove();
+            })
+        };
+    </script>
+</body>
+
+</html>
+
+
+
+
